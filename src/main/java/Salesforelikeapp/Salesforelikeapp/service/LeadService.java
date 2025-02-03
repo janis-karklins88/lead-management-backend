@@ -121,7 +121,10 @@ public class LeadService {
 
             if (key.equalsIgnoreCase("status")) {
                 predicates.add(criteriaBuilder.equal(root.get("status"), value));
-            } else if (key.equalsIgnoreCase("email")) {
+            } else if(key.equalsIgnoreCase("priority")){
+                predicates.add(criteriaBuilder.equal(root.get("priority"), value));
+            }
+              else if (key.equalsIgnoreCase("email")) {
                 predicates.add(criteriaBuilder.like(root.get("email"), "%" + value + "%"));
             } else if (key.equalsIgnoreCase("phone")) {
                 predicates.add(criteriaBuilder.like(root.get("phone"), "%" + value + "%"));

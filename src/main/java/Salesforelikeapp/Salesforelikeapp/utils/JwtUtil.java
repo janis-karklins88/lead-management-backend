@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final String SECRET_KEY = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded()); // Change this!
+    private static final String SECRET_KEY = "mySuperSecretKey1234567890123456"; // key
 
     public static String generateToken(String username) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());

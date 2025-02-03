@@ -28,6 +28,9 @@ public class Lead {
     @Column(nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'New'")
     private String status;
     
+    @Column(nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'Medium'")
+    private String priority;
+    
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -46,13 +49,14 @@ public class Lead {
     // Constructors
     public Lead() {}
 
-    public Lead(String name, String email, String phone, String companyName, String status, String notes, User user) {
+    public Lead(String name, String email, String phone, String companyName, String status, String priority, String notes, User user) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.companyName = companyName;
         this.status = status;
         this.notes = notes;
+        this.priority = priority;
         this.user = user;
     }
 
@@ -99,6 +103,14 @@ public class Lead {
 
     public String getStatus() {
         return status;
+    }
+    
+    public String getPriority(){
+        return priority;
+    }
+    
+    public void setPriority(String priority){
+        this.priority = priority;
     }
 
     public void setStatus(String status) {
