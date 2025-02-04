@@ -40,7 +40,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/register", "/api/login").permitAll() // Allow login & registration
                 .requestMatchers(HttpMethod.PUT, "/api/leads**").authenticated()
-                .anyRequest().authenticated() // 🔒 Protect all other endpoints
+                .requestMatchers(HttpMethod.GET, "/api/activities/lead/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/activities/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/activities/**").authenticated()
+                .anyRequest().authenticated() // Protect all other endpoints
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Use JWT
             .authenticationProvider(authenticationProvider()) // Register authentication provider
