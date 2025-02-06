@@ -4,8 +4,11 @@ package Salesforelikeapp.Salesforelikeapp.service;
 import Salesforelikeapp.Salesforelikeapp.model.Lead;
 import Salesforelikeapp.Salesforelikeapp.model.User;
 import Salesforelikeapp.Salesforelikeapp.repository.LeadRepository;
+import Salesforelikeapp.Salesforelikeapp.repository.ActivityRepository;
 import Salesforelikeapp.Salesforelikeapp.utils.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +34,9 @@ public class LeadService {
 
     @Autowired
     private LeadRepository leadRepository;
+    
+    @Autowired
+    private ActivityRepository activityRepository;
 
     // Create a new lead
     public boolean createLead(Lead lead, User user) {
@@ -91,11 +97,15 @@ public class LeadService {
 
 
     // Delete a lead by ID
+    @Transactional
     public boolean deleteLead(int id) {
     // Check if the lead ID exists
     if (!leadRepository.existsById(id)) {
         throw new IllegalArgumentException("Lead do not exist."); 
     }
+    
+    //Deliting activities asociated with lead
+    activityRepository.deleteByLead_Id(id);
 
     // Delete the lead
     leadRepository.deleteById(id);

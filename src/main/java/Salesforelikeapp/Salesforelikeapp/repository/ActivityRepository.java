@@ -11,4 +11,6 @@ import java.util.List;
 public interface ActivityRepository extends JpaRepository<Activity, Integer> {
     // Find all activities associated with a specific lead
     List<Activity> findByLeadId(int leadID);
+    
+    void deleteByLead_Id(int leadId);
 }
