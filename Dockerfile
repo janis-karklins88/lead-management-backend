@@ -1,28 +1,24 @@
-# Use an official JDK base image
 FROM amazoncorretto:17-alpine
 
-# Create app directory
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml first for caching
-COPY ./mvnw /app/
-COPY ./pom.xml /app/
-COPY ./.mvn /app/.mvn
+# 1. Copy only pom.xml, mvnw, and .mvn folder first (for caching)
+COPY .mvn/ .mvn/
+COPY mvnw .
+COPY pom.xml .
 
-# Give execute permission to the Maven wrapper
-RUN chmod +x /app/mvnw
+# 2. Make the mvnw script executable
+RUN chmod +x mvnw
 
-# Download dependencies (cached if no changes in pom.xml)
+# 3. Pre-download dependencies (takes advantage of above copy for caching)
 RUN ./mvnw dependency:go-offline -B
 
-# Now copy the rest of your source code
-COPY . /app
+# 4. Copy the rest of your source code (src, etc.)
+COPY src/ src/
 
-# Build the JAR, skipping tests
+# 5. Build
 RUN ./mvnw clean package -DskipTests
 
-# Expose port 8080 (or whichever port your Spring Boot app uses)
+# 6. Expose port and run
 EXPOSE 8080
-
-# Set the entrypoint to run the jar
 CMD ["java", "-jar", "target/Salesforelikeapp-0.0.1-SNAPSHOT.jar"]
