@@ -25,33 +25,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private CustomUserDetailsService customUserDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
-        System.out.println("JWT Filter: Checking token");
-        final String authHeader = request.getHeader("Authorization");
-        
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("No JWT token found!!!!!!");
-            chain.doFilter(request, response);
-            return;
-        }
-        
-        String token = authHeader.substring(7);
-        String username = jwtUtil.extractUsername(token);
-        
-        System.out.println("Exctracted username: " + username);
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-
-            if (jwtUtil.validateToken(token)) {
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
-        }
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+        throws ServletException, IOException {
+    System.out.println("JWT Filter: Checking token");
+    
+    // Get the current request path
+    String path = request.getServletPath();
+    
+    // Bypass JWT processing for specific endpoints
+    if (path.equals("/api/health") || path.equals("/api/register") || path.equals("/api/login")) {
         chain.doFilter(request, response);
+        return;
     }
+    
+    final String authHeader = request.getHeader("Authorization");
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        System.out.println("No JWT token found!!!!!!");
+        chain.doFilter(request, response);
+        return;
+    }
+    
+    String token = authHeader.substring(7);
+    String username = jwtUtil.extractUsername(token);
+    
+    System.out.println("Extracted username: " + username);
+    
+    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+    
+        if (jwtUtil.validateToken(token)) {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        }
+    }
+    chain.doFilter(request, response);
+}
+
 }

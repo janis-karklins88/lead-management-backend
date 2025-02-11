@@ -17,13 +17,13 @@
 	<name>Salesforelikeapp</name>
 	<description>Salesforelikeapp</description>
 
-	<!-- ✅ Use Java 17 (LTS) instead of 23 -->
+	<!-- Use Java 17 (LTS) instead of 23 -->
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
-		<!-- ✅ Spring Boot Starter Dependencies -->
+		<!-- Spring Boot Starter Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -37,21 +37,21 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- ✅ Database Connection (MySQL) -->
+		<!-- Database Connection (MySQL) -->
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- ✅ Testing Dependencies -->
+		<!-- Testing Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- ✅ Bcrypt for Password Hashing -->
+		<!-- Bcrypt for Password Hashing -->
 		<dependency>
 			<groupId>at.favre.lib</groupId>
 			<artifactId>bcrypt</artifactId>
@@ -64,7 +64,7 @@
 			<version>1.2.0</version>
 		</dependency>
 
-		<!-- ✅ JSON Web Token (JWT) Dependencies -->
+		<!-- JSON Web Token (JWT) Dependencies -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
@@ -84,18 +84,25 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+                
+                <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <scope>runtime</scope>
+                </dependency>
+
 
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!-- ✅ Spring Boot Maven Plugin -->
+			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<!-- ✅ Ensure Java 17 Compilation -->
+			<!-- Ensure Java 17 Compilation -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

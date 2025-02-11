@@ -38,11 +38,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable CSRF for API
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/register", "/api/login").permitAll() // Allow login & registration
-                .requestMatchers(HttpMethod.PUT, "/api/leads**").authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/activities/lead/**").authenticated()
-                .requestMatchers(HttpMethod.POST, "/api/activities/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/activities/**").authenticated()
+                .requestMatchers("/api/register", "/api/login", "/api/health").permitAll() // Allow login & registration
                 .anyRequest().authenticated() // Protect all other endpoints
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Use JWT
@@ -82,9 +78,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173")); // Allow frontend
+        //allowing requests from any origin while deploying and testing
+        configuration.setAllowedOriginPatterns(List.of("*"));
+        //configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173")); // Allow frontend
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        //configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
