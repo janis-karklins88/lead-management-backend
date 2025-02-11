@@ -4,13 +4,13 @@ FROM amazoncorretto:17-alpine
 # Create app directory
 WORKDIR /app
 
-# Copy Maven wrapper & pom first for caching
+# Copy Maven wrapper and pom.xml first for caching
 COPY ./mvnw /app/
 COPY ./pom.xml /app/
 COPY ./.mvn /app/.mvn
 
-# Give execute permission to mvnw (if needed)
-RUN chmod +x mvnw
+# Give execute permission to the Maven wrapper
+RUN chmod +x /app/mvnw
 
 # Download dependencies (cached if no changes in pom.xml)
 RUN ./mvnw dependency:go-offline -B
@@ -18,7 +18,7 @@ RUN ./mvnw dependency:go-offline -B
 # Now copy the rest of your source code
 COPY . /app
 
-# Build the JAR
+# Build the JAR, skipping tests
 RUN ./mvnw clean package -DskipTests
 
 # Expose port 8080 (or whichever port your Spring Boot app uses)
